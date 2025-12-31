@@ -1,4 +1,4 @@
-# BAD APPLE as a boot disk
+# BAD APPLE but as a boot floppy disk
 
 Bad Apple!! rendered as ASCII frames, played directly from a bootable disk, no OS, no filesystem, no drivers. Just BIOS, x86, and vibes.
 
