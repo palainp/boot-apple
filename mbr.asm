@@ -4,8 +4,8 @@
 ; Where to load the kernel to (we read all the disk, so
 ; the first sector is MBR, and we will jump into the
 ; kernel after one 512 bytes sector...)
-KERNEL_ENTRY equ 0x10000
-KERNEL_SEG equ 0x1000
+KERNEL_ENTRY equ 0x8000
+KERNEL_SEG equ 0x800
 KERNEL_OFF equ 0
 
 SECTOR_PER_TRACK equ 18
@@ -14,7 +14,7 @@ TOTAL_HEADS equ 2
 ; BIOS sets boot drive in 'dl'; store for later use
 mov [boot_drive], dl
 
-mov bp, 0x9000                  ; Setup stack
+mov bp, 0x8000                  ; Setup stack
 mov sp, bp
 
 call load_kernel
