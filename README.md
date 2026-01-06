@@ -54,7 +54,9 @@ Of course you can also play with parameters in the Makefile and recompile stuff 
 - 0x08000-0x8FFFF: kernel + compressed frame
 - 0x90000 and upper: unusable
 ```
-  Our kernel currently has a length of 1940 bytes, leaving 585,835 bytes for compressed images. The complete video contains 6572 images at 30 frames per second, which gives 80*24*6572=12,618,240 bytes, which is too large...
+  Our kernel currently has a length of 1940 bytes, leaving 585,835 bytes for compressed images.
+  The complete video contains 6572 images at 30 frames per second, which gives 80 x 24 x 6572 = 12,618,240 bytes, which is too large...
   The naive RLE compression algorithm reduces the size to 1,093,952 bytes (a ratio of approximately 8.7%, the size is between tar.gz and tar.bz2), which is still too large, leaving us with only about 3,200 images available.
+  A second try with a delta encoder (coding identical frames as 1 byte, and delta from previous frame when it's better than RLE), helps a bit, going down to 1,014,090 bytes (still too large). And it barely worth the additional code in the kernel (not updated yet, you are now limited to `make watch`)...
 
 - I also need to rework the FPS calibration in the kernel, as it's a complete dumb thing so far.

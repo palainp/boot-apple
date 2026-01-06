@@ -81,17 +81,20 @@ $(ASCII_DIR): $(PNG2TXT) $(FRAMES_DIR)
 	mkdir -p $(ASCII_DIR)
 	find $(FRAMES_DIR) -type f -name '*.png' | while read f; do \
 		base=$$(basename $$f .png); \
-		$(PNG2TXT) $(WIDTH) $(HEIGHT) $$f > $(ASCII_DIR)/$$base.txt; \
+		$(PNG2TXT) $(WIDTH) $(HEIGHT) $$f > $(ASCII_DIR)/$$base.txt || exit 10 ; \
 	done
 	touch $(ASCII_DIR)
 
 $(ASCII_FILE): $(ENCODE) $(ASCII_DIR)
 	rm -f $(ASCII_FILE)
-	find $(ASCII_DIR) -type f -name '*.txt' | sort | head -n 3000 | while read f; do \
-		$(ENCODE) $(WIDTH) $(HEIGHT) $$f tmp.bin ; \
-		cat tmp.bin >> $(ASCII_FILE) ; \
+	# first frame is considered black (=' ')
+	printf "%10c" ' ' > tmp.txt
+	find $(ASCII_DIR) -type f -name '*.txt' | sort | while read f; do \
+		# diff $$f tmp.txt | wc -c ; \
+		$(ENCODE) $(WIDTH) $(HEIGHT) $$f tmp.txt out.bin || exit 10 ; \
+		cat out.bin >> $(ASCII_FILE) ; \
+		cp $$f tmp.txt ; \
 	done
-	rm tmp.bin
 
 $(ASCII_HDR): $(ASCII_FILE)
 	xxd -i $< > $@
